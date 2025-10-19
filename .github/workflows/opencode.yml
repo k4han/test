@@ -23,6 +23,6 @@ jobs:
         #env:
         #  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
-          model: grok-code
+          model: opencode/grok-code
           # share: true
           # github_token: xxxx
