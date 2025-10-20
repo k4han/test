@@ -6,11 +6,28 @@ on:
 
 jobs:
   trigger-agent:
+    runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'auto-fix')
-    uses: k4han/bug-fix-agent/.github/workflows/fix-bug-reusable.yml@main
-    with:
-      issue_number: ${{ github.event.issue.number }}
-      issue_title: ${{ github.event.issue.title }}
-      issue_body: ${{ github.event.issue.body }}
-    secrets:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+
+      - name: Checkout bug-fix-agent (private)
+        uses: actions/checkout@v4
+        with:
+          repository: k4han/bug-fix-agent
+          token: ${{ secrets.PAT_PRIVATE_REPO }}
+          path: bug-fix-agent
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run bug fix agent
+        run: python bug-fix-agent/agent/main.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
