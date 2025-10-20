@@ -48,6 +48,7 @@ jobs:
         working-directory: target-repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT_PRIVATE_REPO: ${{ secrets.PAT_PRIVATE_REPO }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
