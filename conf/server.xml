@@ -1,0 +1,71 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+    <!-- A "Connector" represents an endpoint by which requests are received
+         and responses are returned. Documentation at:
+         /docs/config/http.html (for HTTP connectors)
+         /docs/config/ajp.html (for AJP connectors)
+         /docs/config/ssl.html (for SSL connectors)
+    -->
+    <!-- Đã thay đổi port từ 8080 sang 8081 -->
+    <Connector port="8081" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+    <!-- A "Connector" using the shared memory based AJP protocol to connect
+         to the native webserver component (Apache HTTP Server or IIS).
+         Documentation at: /docs/config/ajp.html
+    -->
+    <!--
+    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+    -->
+
+    <!-- An Engine represents the entry point processing functionality that
+         receives and processes all requests from one or more Connectors,
+         and passes them on to the appropriate Host (virtual host).
+         Documentation at: /docs/config/engine.html -->
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <!--For clustering, please take a look at the documentation at:
+          /docs/cluster-howto.html  -->
+      <!--
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+      -->
+    </Engine>
+  </Service>
+</Server>
