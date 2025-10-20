@@ -3,15 +3,14 @@ name: Auto Fix Issues
 on:
   issues:
     types: [labeled]
-
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
 jobs:
   trigger-agent:
     if: github.event.label.name == 'auto-fix'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: read
     steps:
       - name: Checkout target repository (repo 2)
         uses: actions/checkout@v4
