@@ -25,14 +25,4 @@ jobs:
         with:
           model: opencode/grok-code
           # share: true
-          # github_token: xxxx
-
-  trigger-agent:
-    if: contains(github.event.issue.labels.*.name, 'auto-fix')
-    uses: k4han/bug-fix-agent/.github/workflows/fix-bug-reusable.yml@main
-    with:
-      issue_number: ${{ github.event.issue.number }}
-      issue_title: ${{ github.event.issue.title }}
-      issue_body: ${{ github.event.issue.body }}
-    secrets:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}    
+          # github_token: xxxx 
