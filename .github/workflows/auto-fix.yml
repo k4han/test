@@ -6,13 +6,16 @@ on:
 
 jobs:
   trigger-agent:
+    if: github.event.label.name == 'auto-fix'
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'auto-fix')
     steps:
-      - name: Checkout main repo
+      - name: Checkout target repository (repo 2)
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: target-repo
 
-      - name: Checkout bug-fix-agent (private)
+      - name: Checkout bug-fix-agent (repo 1)
         uses: actions/checkout@v4
         with:
           repository: k4han/bug-fix-agent
@@ -23,11 +26,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
+      - name: Install dependencies
+        run: pip install -r bug-fix-agent/requirements.txt
+
       - name: Run bug fix agent
-        run: python bug-fix-agent/agent/main.py
+        working-directory: target-repo
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python ../bug-fix-agent/agent/main.py
