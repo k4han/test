@@ -51,4 +51,4 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PATH: ${{ github.workspace }}/bug-fix-agent/.venv/bin:$PATH
-        run: python ../bug-fix-agent/agent/main.py
+        run: ../bug-fix-agent/.venv/bin/python ../bug-fix-agent/agent/main.py
