@@ -8,6 +8,7 @@ jobs:
   trigger-agent:
     if: github.event.label.name == 'auto-fix'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout target repository (repo 2)
         uses: actions/checkout@v4
@@ -29,23 +30,16 @@ jobs:
 
       - name: Setup uv
         run: |
-            curl -LsSf https://astral.sh/uv/install.sh | sh
-            echo "$HOME/.local/bin" >> $GITHUB_PATH
-      
-      - name: cd to bug-fix-agent
-        run: cd bug-fix-agent
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: virtual env
+      - name: Create virtual environment
+        working-directory: bug-fix-agent
         run: uv venv
 
-      - name: Activate virtual environment
-        run: source .venv/bin/activate
-
       - name: Install dependencies
-        run: uv sync bug-fix-agent/
-
-    #   - name: Install dependencies
-    #     run: pip install -r bug-fix-agent/requirements.txt
+        working-directory: bug-fix-agent
+        run: uv sync
 
       - name: Run bug fix agent
         working-directory: target-repo
@@ -56,4 +50,5 @@ jobs:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          PATH: ${{ github.workspace }}/bug-fix-agent/.venv/bin:$PATH
         run: python ../bug-fix-agent/agent/main.py
