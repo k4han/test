@@ -27,14 +27,22 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Setup uv
+        run: |
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - name: Install dependencies
-        run: pip install -r bug-fix-agent/requirements.txt
+        run: uv pip install -r bug-fix-agent/requirements.txt
+
+    #   - name: Install dependencies
+    #     run: pip install -r bug-fix-agent/requirements.txt
 
       - name: Run bug fix agent
         working-directory: target-repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
