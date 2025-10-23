@@ -1,0 +1,51 @@
+name: Auto Process Issue
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  process-issue:
+    if: github.event.label.name == 'x'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      issues: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout calling repo
+        uses: actions/checkout@v4
+        with:
+          path: calling-repo
+          fetch-depth: 0
+      
+      - name: Checkout repo A
+        uses: actions/checkout@v4
+        with:
+          repository: owner/repo-a
+          token: ${{ secrets.PAT_PRIVATE_REPO }}
+          path: repo-a
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install GitPython
+        
+      - name: Run Python script
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          CALLING_REPO_PATH: ${{ github.workspace }}/test
+        run: |
+          cd /test
+          python process_issue.py
