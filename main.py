@@ -6,9 +6,10 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-@app.oute('/home')
+@app.route('/home')
 def home():
     return 'Welcome to the Home page!'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # For production, set debug=False and handle host/port via environment variables
+    app.run(debug=True, port=8080)
