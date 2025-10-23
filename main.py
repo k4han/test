@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-@app.oute('/home')
+@app.route('/home')
 def home():
     return 'Welcome to the Home page!'
 
