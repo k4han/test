@@ -49,3 +49,12 @@ jobs:
         run: |
           cd bug-fix-agent
           python process_issue.py
+
+      - name: Debug - Show directory structure
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          echo "=== Workspace directory ==="
+          echo "${{ github.workspace }}"
+          echo "=== Directory tree ==="
+          tree -L 3
