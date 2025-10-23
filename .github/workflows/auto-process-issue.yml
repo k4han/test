@@ -47,5 +47,5 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
           CALLING_REPO_PATH: ${{ github.workspace }}/test
         run: |
-          cd /bug-fix-agent
+          cd bug-fix-agent
           python process_issue.py
