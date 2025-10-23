@@ -21,12 +21,12 @@ jobs:
           path: calling-repo
           fetch-depth: 0
       
-      - name: Checkout repo A
+      - name: Checkout repo k4han/bug-fix-agent
         uses: actions/checkout@v4
         with:
-          repository: owner/repo-a
+          repository: k4han/bug-fix-agent
           token: ${{ secrets.PAT_PRIVATE_REPO }}
-          path: repo-a
+          path: bug-fix-agent
       
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -47,5 +47,5 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
           CALLING_REPO_PATH: ${{ github.workspace }}/test
         run: |
-          cd /test
+          cd /bug-fix-agent
           python process_issue.py
